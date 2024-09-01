@@ -16,3 +16,6 @@ $ c2ffi ./include/Xlib.h | ffigen -l libXlib.so
 $ deno run --allow-ffi ./Xlib.ts
 ```
 
+Sample logs:
+
+![image](https://github.com/user-attachments/assets/66eb5f35-7b57-4760-863f-9ad60d7049d7)
