@@ -20,7 +20,7 @@ const str = new TextDecoder().decode(inp);
 const symbols = JSON.parse(str) as Definition[];
 
 type Definition = {
-  tag: "typedef";
+  tag: "typedef" | "struct";
   ns: number;
   name: string;
   location: string;
@@ -122,8 +122,14 @@ const symbolSource: Record<string, Deno.ForeignFunction & { doc: string }> = {};
 
 let total = 0, generated = 0;
 let totalTypeDefs = 0, generatedTypeDefs = 0;
+const unknowns = new Map<string, number>();
+
 for (const x of symbols) {
   switch (x.tag) {
+    case "struct": {
+	    /* Pass it on as a typedef */
+	    x.type = x;
+    }
     case "typedef": {
       totalTypeDefs++;
       let result = denoFFIType(x.type, x.name);
@@ -185,12 +191,19 @@ for (const x of symbols) {
       generated++;
       break;
     }
-    default:
+    default: {
+      const tag = (x as any).tag;
+      unknowns.set(tag, (unknowns.get(tag) ?? 0) + 1);
+      console.error(`unknown tag ${tag}`);
       break;
+    }
   }
 }
 
 console.error("=== GENERATED ===");
+console.error(
+  `unknowns  => ${Array.from(unknowns.entries()).map(([k, v]) => `${k}: ${v}`).join(", ")}`,
+);
 console.error(
   `functions => total: ${total}, generated: ${generated}, skipped: ${
     total - generated

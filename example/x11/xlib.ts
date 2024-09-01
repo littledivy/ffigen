@@ -2017,7 +2017,7 @@ const _ = {
   }
 } as const;
 
-const { symbols } = Deno.dlopen("libXlib.so", _);
+const { symbols } = Deno.dlopen("libX11.so", _);
 
 export default symbols;
 
