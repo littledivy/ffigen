@@ -81,6 +81,7 @@ const tagMapping: Record<string, Deno.NativeResultType> = {
   ":long": "i64",
   ":long-long": "i64",
   ":long-double": "f64",
+  ":float": "f32",
   ":short": "i16",
   ":unsigned": "u32",
   ":unsigned-long": "u64",
